@@ -53,31 +53,23 @@ data("Journals")
 
 # 資料處理：產生新變數 dplyr::mutate
 
-```{r}
-# if follow usage,
-mutate(
-  Journals,
-  citeprice=price/citations
-  ) -> journals
-# pipe expression,
-Journals %>% 
-  mutate(
-    citeprice=price/citations
-    ) -> 
-  journals
-```
-
 
 
 ```{r ch2-summary, results='hide'}
 Journals %>% mutate(citeprice=price/citations) -> journals
 summary(journals)
-
+#333333
+#pipe expression
+Journals %>% mutate(
+  citeprice=price/citations
+  )->
+  Journals
 ```
 
 # 因果問句
 
 > 期刊的價格(citeprice，平均文獻引用價格)如何影響其圖書館訂閱量(subs)? 
+
 
 ```{r ols-paircorr-r, echo=TRUE}
 library(psych)
@@ -86,29 +78,19 @@ journals %>%
   pairs.panels()
 ```
 
-```{r}
-# traditional usage
-select(journals,citeprice,subs) -> tempDF
-pairs.panels(tempDF)
-```
-
-```{r}
-# pipe expression
-journals %>% 
-  select(citeprice,subs) ->
-  tempDF
-tempDF %>%
-  pairs.panels()
-```
-
-```{r}
-journals %>% 
-  select(citeprice,subs) %>%
-  pairs.panels()
-```
-
 
 ```{r ols-paircorr2-r}
+#traditionanl usage
+select(journals,citeprice,subs) ->
+  tempDF
+pairs.panels(tempDF)
+# pipr expression
+journals %>%
+  select(citeprice,subs) #%>%
+  pairs.panels(tempDF)  
+```
+
+```{r}
 journals %>% 
   select(citeprice,subs) %>%
   mutate_all(log) %>%
@@ -129,7 +111,10 @@ journals %>%
 數值變數v.s.數值變數
 
 ```{r ols-paircoor3-r, results='hide'}
-
+journals %>% 
+  select(citeprice,subs) %>%
+  mutate_all(log) %>%
+  pairs.panels()
 
 ```
 
